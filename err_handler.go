@@ -1,7 +1,6 @@
 package err_handler
 
 import (
-    "errors"
     "strconv"
 )
 

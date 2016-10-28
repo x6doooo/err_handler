@@ -25,32 +25,32 @@ func (me *CommonError) Error() string {
     return "[" + codeStr + "] " + me.Msg
 }
 
-func GetErr(e interface{}) (err CommonError) {
+func GetErr(e interface{}) (err *CommonError) {
 
-    er, ok := e.(CommonError)
+    cerr, ok := e.(CommonError)
     if ok {
-        err = er
+        err = &cerr
         return
     }
 
     switch e.(type) {
     case error:
         er := e.(error)
-        err = CommonError{
+        err = &CommonError{
             Code: 1,
             Msg: er.Error(),
             SrcErr: er,
         }
     case string:
         er := e.(string)
-        err = CommonError{
+        err = &CommonError{
             Code: 1,
             Msg: er,
             SrcErr: errors.New(er),
         }
     default:
         er := fmt.Sprintf("meta error: %v", e)
-        err = CommonError{
+        err = &CommonError{
             Code: 2,
             Msg: er,
             SrcErr: errors.New(er),
@@ -61,7 +61,7 @@ func GetErr(e interface{}) (err CommonError) {
 
 func Recover(err *error, cb func()) {
     if e := recover(); e != nil {
-        *err = &GetErr(e)
+        *err = GetErr(e)
     }
     cb()
 }

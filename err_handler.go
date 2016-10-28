@@ -2,6 +2,8 @@ package err_handler
 
 import (
     "strconv"
+    "errors"
+    "fmt"
 )
 
 type CommonError struct {
@@ -33,21 +35,25 @@ func GetErr(e interface{}) (err CommonError) {
 
     switch e.(type) {
     case error:
+        er := e.(error)
         err = CommonError{
             Code: 1,
-            Msg: e.(error).Error(),
-            SrcErr: e,
+            Msg: er.Error(),
+            SrcErr: er,
         }
     case string:
+        er := e.(string)
         err = CommonError{
             Code: 1,
-            Msg: e.(string),
+            Msg: er,
+            SrcErr: errors.New(er),
         }
     default:
+        er := fmt.Sprintf("meta error: %v", e)
         err = CommonError{
             Code: 2,
-            Msg: "",
-            SrcErr: e,
+            Msg: er,
+            SrcErr: errors.New(er),
         }
     }
     return

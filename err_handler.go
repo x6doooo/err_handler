@@ -59,16 +59,10 @@ func GetErr(e interface{}) (err *CommonError) {
     return
 }
 
-//func Recover(err *error, cb func()) {
-//    if e := recover(); e != nil {
-//        *err = GetErr(e)
-//    }
-//    cb()
-//}
-
-func Recover() (err error) {
+func Recover(err *error, cb func()) {
     if e := recover(); e != nil {
-        err = GetErr(e)
+        *err = GetErr(e)
     }
-    return
+    cb()
 }
+

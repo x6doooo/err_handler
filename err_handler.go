@@ -20,6 +20,9 @@ func NewCommonError(code int, msg string, err error) CommonError {
     }
 }
 
+
+
+
 func (me *CommonError) Error() string {
     codeStr := strconv.Itoa(me.Code)
     return "[" + codeStr + "] " + me.Msg
